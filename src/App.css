@@ -4,6 +4,8 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+  flex-flow: column;
+  row-gap: 50px;
 }
 
 .App-logo {
