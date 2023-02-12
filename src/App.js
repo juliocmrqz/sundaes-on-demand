@@ -1,12 +1,14 @@
 import './App.css';
-import SummaryForm from './pages/summary/SummaryForm';
+import OrderEntry from './pages/entry/OrderEntry'
+import SummaryForm from './pages/summary/SummaryForm'
 
 function App() {
   return (
     <div className="App">
-      <SummaryForm></SummaryForm>
+      <OrderEntry />
+      <SummaryForm />
     </div>
-  );
+  )
 }
 
 export default App;
