@@ -16,7 +16,7 @@ const afterAllHandler = () => {
 }
 
 /**
- * Establish APO mocking before all tests
+ * Establish API mocking before all tests
  */
 beforeAll(beforeAllHandler)
 
