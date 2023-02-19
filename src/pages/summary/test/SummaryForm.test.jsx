@@ -1,29 +1,26 @@
+import userEventsPlusRender from '../../common/userRender'
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import SummaryForm from '../SummaryForm'
 
-const userFormRender = (jsx) => {
-  return { user: userEvent.setup(), ...render(jsx) }
-}
 // case insensitive regular expression
 const buttonOptions = { name: /confirm order/i }
 const checkboxOptions = { name: /terms and conditions/i }
 
 describe('Initial conditions:', () => {
   it('Button disabled', async () => {
-    userFormRender(<SummaryForm />)
+    render(<SummaryForm />)
     const submitButton = screen.getByRole('button', buttonOptions)
     expect(submitButton).toBeDisabled()
   })
 
   it('Checkbox unchecked', async () => {
-    userFormRender(<SummaryForm />)
+    render(<SummaryForm />)
     const termsAndConditionsCheckbox = screen.getByRole('checkbox', checkboxOptions)
     expect(termsAndConditionsCheckbox).not.toBeChecked()
   })
 
   it('Popup is not on the document', async () => {
-    userFormRender(<SummaryForm />)
+    render(<SummaryForm />)
     const nullPopover = screen.queryByText(/No ice cream will actually be delivered/i)
     expect(nullPopover).not.toBeInTheDocument()
   })
@@ -33,7 +30,7 @@ describe('Checkbox:', () => {
   it(`Enables the button when checked
       &&
       Disables the button when unchecked back`, async () => {
-    const { user } = userFormRender(<SummaryForm />)
+    const { user } = userEventsPlusRender(<SummaryForm />)
 
     const submitButton = screen.getByRole('button', buttonOptions)
     const termsAndConditionsCheckbox = screen.getByRole('checkbox', checkboxOptions)
@@ -47,7 +44,7 @@ describe('Checkbox:', () => {
 
 describe('Label:', () => {
   it('Popup responds to hover', async () => {
-    const { user } = userFormRender(<SummaryForm />)
+    const { user } = userEventsPlusRender(<SummaryForm />)
     // popover is hidden when the page loads
     const nullPopover = screen.queryByText(/No ice cream will actually be delivered/i)
     expect(nullPopover).not.toBeInTheDocument()
