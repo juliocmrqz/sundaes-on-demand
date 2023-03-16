@@ -1,14 +1,21 @@
-import './App.css';
+import Container from 'react-bootstrap/Container'
 import OrderEntry from './pages/entry/OrderEntry'
-import SummaryForm from './pages/summary/SummaryForm'
+import OrderSummary from './pages/summary/OrderSummary'
+import { OrderDetailsProvider } from './context/OrderDetails'
 
 function App() {
   return (
-    <div className="App">
-      <OrderEntry />
-      <SummaryForm />
-    </div>
+    <Container>
+      <OrderDetailsProvider>
+        {/* Summary page and entry page needs provider */}
+        <OrderEntry />
+        <br></br>
+        <br></br>
+        <OrderSummary />
+      </OrderDetailsProvider>
+      {/* Confirmation page does not need provider */}
+    </Container>
   )
 }
 
-export default App;
+export default App

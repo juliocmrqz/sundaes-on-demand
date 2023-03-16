@@ -5,11 +5,12 @@ import Options from '../Options'
 describe('Updates when the entry changes:', () => {
   //! test =================================================
   it('The subtotal should start at $0.00', () => {
-    userEventsPlusRender(<Options optionType={'scoops'} />)
+    const { unmount } = userEventsPlusRender(<Options optionType={'scoops'} />)
     const scoopsSubtotal = screen.getByText('Scoops total: $', { exact: false })
 
     // Make sure the total starts out at $0.00
     expect(scoopsSubtotal).toHaveTextContent('0.00')
+    unmount()
   })
 
   //! test =================================================

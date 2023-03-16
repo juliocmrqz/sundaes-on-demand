@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { OrderDetailsProvider } from '../../context/OrderDetails'
 
 /**
  *
@@ -10,7 +11,7 @@ import userEvent from '@testing-library/user-event'
  * then it can be used as await user.methodToUse()
  */
 const userEventsPlusRender = (jsx) => {
-  return { user: userEvent.setup(), ...render(jsx) }
+  return { user: userEvent.setup(), ...render(jsx, { wrapper: OrderDetailsProvider }) }
 }
 
 export default userEventsPlusRender
