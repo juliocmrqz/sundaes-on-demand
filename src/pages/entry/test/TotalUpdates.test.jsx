@@ -1,5 +1,5 @@
 import userEventsPlusRender from '../../common/userRender'
-import { screen } from '@testing-library/react'
+import { screen } from '../../common/userRender'
 import Options from '../Options'
 
 describe('Updates when the entry changes:', () => {
