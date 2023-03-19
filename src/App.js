@@ -9,8 +9,6 @@ function App() {
       <OrderDetailsProvider>
         {/* Summary page and entry page needs provider */}
         <OrderEntry />
-        <br></br>
-        <br></br>
         <OrderSummary />
       </OrderDetailsProvider>
       {/* Confirmation page does not need provider */}

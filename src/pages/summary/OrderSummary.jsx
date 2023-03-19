@@ -21,7 +21,6 @@ const OrderSummary = () => {
   })
   return (
     <div>
-      <div>OrderSummary</div>
       <h4>Scoops: {formatCurrency(totals.scoops)}</h4>
       <ul>{scoopsListToDisplay}</ul>
       <h4>Toppings: {formatCurrency(totals.toppings)}</h4>

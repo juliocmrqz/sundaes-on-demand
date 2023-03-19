@@ -20,7 +20,7 @@ export default function SummaryForm() {
   )
 
   return (
-    <Form>
+    <Form style={{ marginBottom: '50px' }}>
       <Form.Group controlId="terms-and-conditions">
         <Form.Check
           type="checkbox"

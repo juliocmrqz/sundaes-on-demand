@@ -49,6 +49,7 @@ const OrderDetailsProvider = (props) => {
     newOptionCounts[optionType][itemName] = newItemCount
 
     // set the updated state with the updated copy
+    // console.log(newOptionCounts)
     setOptionCounts(newOptionCounts)
   }
 
@@ -76,7 +77,9 @@ const OrderDetailsProvider = (props) => {
     toppings: calculateTotal('toppings')
   }
 
-  const value = { optionCounts, totals, updateItemCount, resetOrder }
+  const granTotal = totals.scoops + totals.toppings
+
+  const value = { optionCounts, totals, granTotal, updateItemCount, resetOrder }
   return <OrderDetails.Provider value={value} {...props} />
 }
 
