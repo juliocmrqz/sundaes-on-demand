@@ -21,7 +21,8 @@ const ScoopOptions = (props) => {
         alt={`${scoopOptionName} scoop`}
         title={scoopOptionName}
       />
-      <Form.Group controlId={`${scoopOptionName}-count`} as={Row} style={{ marginTop: '10px' }}>
+      {/* prettier-ignore */}
+      <Form.Group controlId={`${scoopOptionName.replace(' ', '-')}-count`} as={Row} style={{ marginTop: '10px' }}>
         <Form.Label column xs={'6'} style={{ textAlign: 'right', fontWeight: 600 }}>
           {scoopOptionName}
         </Form.Label>

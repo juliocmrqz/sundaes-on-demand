@@ -81,12 +81,67 @@ describe('Toppings update when the entry changes:', () => {
 
 describe('The Grand Total:', () => {
   it('Starts at cero 0.00', async () => {
-    userEventsPlusRender(<OrderEntry />)
+    const { unmount } = userEventsPlusRender(<OrderEntry />)
     const grandTotal = screen.getByRole('heading', { name: /grand total: \$/i })
     expect(grandTotal).toHaveTextContent('0.00')
+    unmount()
   })
 
-  // it('Updates properly if scoop is added first', () => {})
-  // it('Updates properly if topping is added first', () => {})
-  // it('Updates properly if item is removed', () => {})
+  it('Updates properly if scoops are added first than toppings', async () => {
+    // as we need to interact, the firt thing to do is to add the userEvent.setup
+    // already included in the userEventsPlusRender, so we proceed to destructure
+    const { user } = userEventsPlusRender(<OrderEntry />)
+    const grandTotal = screen.getByRole('heading', { name: /grand total: \$/i }) // we search for a RegExp in order to simply obtain the element without the actual total.
+    const vanillaInput = await screen.findByRole('spinbutton', { name: 'Vanilla' }) // we specify an option to type in.
+    const mintChip = await screen.findByRole('spinbutton', { name: 'Mint chip' }) // we specify an option to type in.
+    const mmsCheckbox = await screen.findByRole('checkbox', { name: 'M&Ms' })
+
+    await user.clear(vanillaInput)
+    await user.type(vanillaInput, '2')
+    await user.clear(mintChip)
+    await user.type(mintChip, '1')
+    expect(grandTotal).toHaveTextContent('6.00')
+
+    await user.click(mmsCheckbox)
+    expect(grandTotal).toHaveTextContent('7.50')
+  })
+
+  it('Updates properly if topping is added first', async () => {
+    // idem to previous test
+    const { user } = userEventsPlusRender(<OrderEntry />)
+    const grandTotal = screen.getByRole('heading', { name: /grand total: \$/i }) // we search for a RegExp in order to simply obtain the element without the actual total.
+    const vanillaInput = await screen.findByRole('spinbutton', { name: 'Vanilla' }) // we specify an option to type in.
+    const mintChip = screen.getByRole('spinbutton', { name: 'Mint chip' }) // we specify an option to type in.
+    const mmsCheckbox = await screen.findByRole('checkbox', { name: 'M&Ms' })
+
+    await user.click(mmsCheckbox)
+    expect(grandTotal).toHaveTextContent('1.50')
+
+    await user.clear(vanillaInput)
+    await user.type(vanillaInput, '1')
+    await user.clear(mintChip)
+    await user.type(mintChip, '1')
+    expect(grandTotal).toHaveTextContent('5.50')
+  })
+
+  it('Updates properly if an item is removed', async () => {
+    // idem to previous test
+    const { user } = userEventsPlusRender(<OrderEntry />)
+    const grandTotal = screen.getByRole('heading', { name: /grand total: \$/i }) // we search for a RegExp in order to simply obtain the element without the actual total.
+    const vanillaInput = await screen.findByRole('spinbutton', { name: 'Vanilla' }) // we specify an option to type in.
+    const mintChip = screen.getByRole('spinbutton', { name: 'Mint chip' }) // we specify an option to type in.
+    const mmsCheckbox = await screen.findByRole('checkbox', { name: 'M&Ms' })
+
+    await user.click(mmsCheckbox)
+    // expect(grandTotal).toHaveTextContent('1.50') commented as this is happening behind the curtains in previous tests, no need for assertions here.
+
+    await user.clear(vanillaInput)
+    await user.type(vanillaInput, '1')
+    await user.clear(mintChip)
+    await user.type(mintChip, '1')
+    // expect(grandTotal).toHaveTextContent('5.50') commented as this is happening behind the curtains in previous tests, no need for assertions here.
+
+    await user.click(mmsCheckbox)
+    expect(grandTotal).toHaveTextContent('4.00')
+  })
 })
