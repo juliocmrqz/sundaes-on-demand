@@ -2,14 +2,27 @@ import { Col } from 'react-bootstrap'
 import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 import { useOrderDetails } from '../../context/OrderDetails'
+import { useState } from 'react'
 
 const ScoopOptions = (props) => {
   const scoopOptionName = props.name
   const scoopOptionImgPath = props.imagePath
   const { updateItemCount } = useOrderDetails()
+  const [isValid, setIsValid] = useState(true)
 
   const onChangeHandler = (event) => {
-    updateItemCount(scoopOptionName, parseInt(event.target.value), 'scoops')
+    const currentValue = event.target.value
+    // we validate a number, event.target.value returns a string
+    const currentValueFloat = parseFloat(currentValue)
+    // ! isValid when value is within 0-10 and it's an integer
+    // prettier-ignore
+    const valueIsValid = 0 <= currentValueFloat && currentValueFloat <= 10 && Math.floor(currentValueFloat) === currentValueFloat
+    // set the valid state
+    setIsValid(valueIsValid)
+
+    // only update the value when valid
+    const valueToUpdate = valueIsValid ? parseInt(currentValue) : 0
+    updateItemCount(scoopOptionName, valueToUpdate, 'scoops')
   }
 
   return (
@@ -27,7 +40,7 @@ const ScoopOptions = (props) => {
           {scoopOptionName}
         </Form.Label>
         <Col xs={'5'} style={{ textAlign: 'left' }}>
-          <Form.Control type={'number'} defaultValue={0} onChange={onChangeHandler}></Form.Control>
+          <Form.Control isInvalid={!isValid} type={'number'} defaultValue={0} onChange={onChangeHandler}></Form.Control>
         </Col>
       </Form.Group>
     </Col>
