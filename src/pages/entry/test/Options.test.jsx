@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '../../../test-utils/testing-library-utils'
 import Options from '../Options'
 
 describe('From the mocked server:', () => {
@@ -8,7 +8,7 @@ describe('From the mocked server:', () => {
 
     // find images
     const scoopImages = await screen.findAllByRole('img', options)
-    expect(scoopImages).toHaveLength(2) // because the handler is getting 2 elements
+    expect(scoopImages).toHaveLength(3) // because the handler is getting 3 elements
 
     // confirm alt text for images
     const altText = scoopImages.map((element) => {
@@ -16,7 +16,7 @@ describe('From the mocked server:', () => {
     })
 
     // because is an Array it uses toEqual() instead of toBe()
-    expect(altText).toEqual(['Chocolate scoop', 'Vanilla scoop'])
+    expect(altText).toEqual(['Chocolate scoop', 'Vanilla scoop', 'Mint chip scoop'])
   })
 
   it('Each topping option should display an image', async () => {
