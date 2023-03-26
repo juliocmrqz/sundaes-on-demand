@@ -20,14 +20,14 @@ import App from '../App'
  */
 
 describe('Application "Happy Path":', () => {
-  it(`Order phases:
-        -> Add ice cream scoops and toppings
-        -> find and click order button
-        -> check summary information based on order
-        -> accepts terms and conditions and click button to confirm order
-        -> confirm order number on confirmation page
-        -> click 'new order' button on confirmation page
-        -> check that scoops and toppings subtotals have been reset`, async () => {
+  it(`Should have a normal order phase:
+        -> Should Add ice cream scoops and toppings
+        -> Should click the order button
+        -> Should be able to check the summary information based on the order
+        -> Should accept the terms and conditions and click button to confirm order
+        -> Should confirm order number on confirmation page
+        -> Should be able to click 'new order' button on confirmation page
+        -> Should check that scoops and toppings subtotals have been reset after "new order"`, async () => {
     const user = userEvent.setup()
     const { unmount } = render(<App />)
 
@@ -65,7 +65,7 @@ describe('Application "Happy Path":', () => {
     await user.click(confirmOrderButton)
 
     // Loading on the confirmation page
-    const loadingMessage = await screen.findByText(/loading.../i)
+    const loadingMessage = screen.getByText(/loading.../i)
     expect(loadingMessage).toBeInTheDocument()
 
     // confirmation page with no errors
@@ -90,5 +90,60 @@ describe('Application "Happy Path":', () => {
 
     // explicit component unmount to avoid not wrapped in act(...)
     unmount()
+  })
+
+  describe('Should not display toppings on summary:', () => {
+    it('If no toppings ordered', async () => {
+      const user = userEvent.setup()
+      render(<App />)
+
+      const vanillaInput = await screen.findByRole('spinbutton', { name: 'Vanilla' })
+      await user.clear(vanillaInput)
+      await user.type(vanillaInput, '1')
+      const chocolateInput = screen.getByRole('spinbutton', { name: 'Chocolate' })
+      await user.clear(chocolateInput)
+      await user.type(chocolateInput, '2')
+
+      const orderSummaryButton = screen.getByRole('button', { name: /order sundae/i })
+      await user.click(orderSummaryButton)
+
+      const scoopsHeading = screen.getByRole('heading', { name: 'Scoops: $6.00' })
+      expect(scoopsHeading).toBeInTheDocument()
+
+      const toppingsHeading = screen.queryByRole('heading', { name: /toppins/i })
+      expect(toppingsHeading).not.toBeInTheDocument()
+    })
+
+    it('The toppings are selected, then removed', async () => {
+      const user = userEvent.setup()
+      render(<App />)
+      const vanillaInput = await screen.findByRole('spinbutton', { name: 'Vanilla' })
+      await user.clear(vanillaInput)
+      await user.type(vanillaInput, '1')
+
+      const peanutButterCheckbox = await screen.findByRole('checkbox', {
+        name: 'Peanut butter cups'
+      })
+      await user.click(peanutButterCheckbox) // add true
+      expect(peanutButterCheckbox).toBeChecked()
+
+      // in order to know the topping was successfuly added
+      const toppingsHeading = screen.getByText('Toppings total: $', { exact: false })
+      expect(toppingsHeading).toHaveTextContent('1.50')
+
+      await user.click(peanutButterCheckbox) // add false
+      expect(peanutButterCheckbox).not.toBeChecked()
+      expect(toppingsHeading).toHaveTextContent('0.00')
+
+      // find and click the order button
+      const orderSummaryButton = screen.getByRole('button', { name: /order sundae/i })
+      await user.click(orderSummaryButton)
+
+      // summary page
+      const scoopsHeading = screen.getByRole('heading', { name: 'Scoops: $2.00' })
+      expect(scoopsHeading).toBeInTheDocument()
+      const toppinsHeading = screen.queryByRole('heading', { name: /toppings/i })
+      expect(toppinsHeading).not.toBeInTheDocument()
+    })
   })
 })

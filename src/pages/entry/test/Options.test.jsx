@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { render, screen } from '../../../test-utils/testing-library-utils'
 import Options from '../Options'
 
@@ -35,5 +36,28 @@ describe('From the mocked server:', () => {
     })
 
     expect(altText).toEqual(['M&Ms topping', 'Hot fudge topping', 'Peanut butter cups topping'])
+  })
+})
+
+describe('The subtotal', () => {
+  it('should not update is scoops input is invalid', async () => {
+    const user = userEvent.setup()
+    render(<Options optionType={'scoops'} />)
+
+    const vanillaInput = await screen.findByRole('spinbutton', { name: 'Vanilla' })
+    const scoopsSubtotal = screen.getByText('Scoops total: $0.00')
+
+    // doesn't update if the user inputs floar number
+    await user.clear(vanillaInput)
+    await user.clear(vanillaInput, '2.5')
+    expect(scoopsSubtotal).toHaveTextContent('$0.00')
+    // doesn't update if the user inputs out of range number
+    await user.clear(vanillaInput)
+    await user.clear(vanillaInput, '100')
+    expect(scoopsSubtotal).toHaveTextContent('$0.00')
+    // doesn't update is the user inputs negative number
+    await user.clear(vanillaInput)
+    await user.clear(vanillaInput, '-1')
+    expect(scoopsSubtotal).toHaveTextContent('$0.00')
   })
 })
