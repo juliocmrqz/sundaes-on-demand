@@ -4,7 +4,7 @@ import { formatCurrency } from '../../utilities'
 
 import React from 'react'
 
-const OrderSummary = () => {
+const OrderSummary = ({ setOrderPhase }) => {
   const { totals, optionCounts } = useOrderDetails()
 
   const scoopsArray = Object.entries(optionCounts.scoops) // e.g. [['Chocolate', 2], ['Vanilla', 1]]
@@ -19,13 +19,15 @@ const OrderSummary = () => {
   const toppingsListToDisplay = toppingsArray.map((key) => {
     return <li key={key}>{key}</li>
   })
+
   return (
     <div>
+      <h2>Order Summary</h2>
       <h4>Scoops: {formatCurrency(totals.scoops)}</h4>
       <ul>{scoopsListToDisplay}</ul>
       <h4>Toppings: {formatCurrency(totals.toppings)}</h4>
       <ul>{toppingsListToDisplay}</ul>
-      <SummaryForm />
+      <SummaryForm setOrderPhase={setOrderPhase} />
     </div>
   )
 }

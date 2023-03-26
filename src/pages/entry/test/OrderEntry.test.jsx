@@ -23,7 +23,7 @@ describe('Order Entry API returns 500:', () => {
         return res(ctx.status(500))
       })
     )
-    render(<OrderEntry />)
+    render(<OrderEntry setOrderPhase={jest.fn()} />)
 
     /**
      *! We are using the waitFor API in order to get all the elements
@@ -54,7 +54,7 @@ describe('Order Entry API returns 500:', () => {
         return res(ctx.status(500))
       })
     )
-    render(<OrderEntry />)
+    render(<OrderEntry setOrderPhase={jest.fn()} />)
 
     /**
      *! We are using the waitFor API in order to get all the elements

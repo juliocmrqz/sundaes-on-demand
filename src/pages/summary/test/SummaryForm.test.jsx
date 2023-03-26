@@ -8,19 +8,19 @@ const checkboxOptions = { name: /terms and conditions/i }
 
 describe('Initial conditions:', () => {
   it('Button disabled', async () => {
-    render(<SummaryForm />)
+    render(<SummaryForm setOrderPhase={jest.fn()} />)
     const submitButton = screen.getByRole('button', buttonOptions)
     expect(submitButton).toBeDisabled()
   })
 
   it('Checkbox unchecked', async () => {
-    render(<SummaryForm />)
+    render(<SummaryForm setOrderPhase={jest.fn()} />)
     const termsAndConditionsCheckbox = screen.getByRole('checkbox', checkboxOptions)
     expect(termsAndConditionsCheckbox).not.toBeChecked()
   })
 
   it('Popup is not on the document', async () => {
-    render(<SummaryForm />)
+    render(<SummaryForm setOrderPhase={jest.fn()} />)
     const nullPopover = screen.queryByText(/No ice cream will actually be delivered/i)
     expect(nullPopover).not.toBeInTheDocument()
   })
@@ -30,7 +30,7 @@ describe('Checkbox:', () => {
   it(`Enables the button when checked
       &&
       Disables the button when unchecked back`, async () => {
-    const { user } = userEventsPlusRender(<SummaryForm />)
+    const { user } = userEventsPlusRender(<SummaryForm setOrderPhase={jest.fn()} />)
 
     const submitButton = screen.getByRole('button', buttonOptions)
     const termsAndConditionsCheckbox = screen.getByRole('checkbox', checkboxOptions)
@@ -44,7 +44,7 @@ describe('Checkbox:', () => {
 
 describe('Label:', () => {
   it('Popup responds to hover', async () => {
-    const { user } = userEventsPlusRender(<SummaryForm />)
+    const { user } = userEventsPlusRender(<SummaryForm setOrderPhase={jest.fn()} />)
     // popover is hidden when the page loads
     const nullPopover = screen.queryByText(/No ice cream will actually be delivered/i)
     expect(nullPopover).not.toBeInTheDocument()
